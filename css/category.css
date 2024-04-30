@@ -1,0 +1,153 @@
+.products .box-container .box .fa-shopping-cart {
+    right: 1rem;
+    top: 31rem;
+    border-radius: 5px;
+}
+
+.title {
+    text-align: center;
+    text-decoration: underline;
+    font-size: 3rem;
+    text-transform: capitalize;
+    padding: 10px;
+    
+}
+
+.products .box-container .box .flex .qty {
+    padding: 1rem;
+    font-size: 1.8rem;
+    color: black;
+    height: 30px;
+    width: 51px;
+    margin-right: 6rem;
+    border: 1px solid;
+    border-radius: 5px;
+}
+
+.products .box-container .box .fa-shopping-cart:hover {
+    background-color: orangered;
+}
+
+.products .box-container .box .fa-shopping-cart {
+    right: 1rem;
+    top: 26.0.1rem ;
+    border-radius: 4px;
+}
+
+
+.products .box-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, 33rem);
+    justify-content: center;
+    align-items: flex-start;
+    gap: 1.5rem;
+}
+
+.products .box-container .box {
+    border: 1px solid black;
+    padding: 1.5rem;
+    position: relative;
+    overflow: hidden;
+    background-color: yellow;
+    border-radius: 5px;
+}
+
+.products .box-container .box img {
+    height: 18.5rem;
+    width: 100%;
+    object-fit: contain;
+    margin-bottom: 1rem;
+}
+
+/* add to cart button icon */
+.products .box-container .box .fa-shopping-cart {
+    position: absolute;
+    top: 1rem;
+    height: 4.5rem;
+    width: 4.5rem;
+    line-height: 4.3rem;
+    border: 1ps solid black;
+    background-color: white;
+    cursor: pointer;
+    font-size: 2rem;
+    color: black;
+    transition: .2s linear;
+    text-align: center;
+}
+
+
+
+.products .box-container .box .fa-shopping-cart {
+    right: 1rem;
+    top: 25rem;
+}
+
+
+.products .box-container .box:hover .fa-shopping-cart {
+    right: 1rem;
+}
+
+.products .box-container .box .cat {
+    font-size: 1.8rem;
+    color: var(--light-color);
+}
+
+.products .box-container .box .cat:hover {
+    color: orangered;
+    text-decoration: underline;
+}
+
+.products .box-container .box .name {
+    font-size: 2rem;
+    color: black;
+    margin: 1rem 0;
+}
+
+.products .box-container .box .flex {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.products .box-container .box .flex .price {
+    margin-right: auto;
+    font-size: 2.5rem;
+    color: black;
+}
+
+.products .box-container .box .flex .price span {
+    color: black;
+    font-size: 1.8rem;
+}
+
+.products .box-container .box .flex .qty {
+
+    padding: 1rem;
+    font-size: 1.8rem;
+    color: black;
+    height: 30px;
+    width: 51px;
+    margin-right: 6rem;
+}
+
+
+
+.products .box-container .box .flex .fa-edit:hover {
+    background-color: black;
+    color: white;
+}
+
+.products .box-container .box .fa-times {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background-color: red;
+    color: white;
+    border: 1px solid black;
+    line-height: 4rem;
+    height: 4.3rem;
+    width: 4.5rem;
+    cursor: pointer;
+    font-size: 2rem;
+}

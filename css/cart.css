@@ -1,0 +1,221 @@
+.heading {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   gap: 1rem;
+   flex-flow: column;
+   background-color: white;
+   min-height: 20rem;
+}
+
+.heading h3{
+  color: black;
+  text-decoration: underline;
+}
+.productslist {
+   padding: 20px;
+}
+
+.table {
+   background-color: yellow;
+   border-top: 1px solid black;
+   border-left:1px solid black ;
+   
+   display: flex;
+   justify-content: space-between;
+   margin-bottom: 10px;
+}
+
+.table label {
+   flex-basis: calc(20% - 10px);
+   text-align: center;
+   font-weight: bold;
+}
+
+.box-containera {
+   width: 100%;
+}
+
+.box {
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   margin-bottom: 10px;
+   padding: 10px;
+   width: 100%;
+}
+
+.box img {
+   width: 80px;
+   height: 80px;
+   object-fit: cover;
+   margin-right: 10px;
+}
+
+.name {
+   flex-basis: 30%;
+}
+
+.flex {
+   display: flex;
+   align-items: center;
+}
+
+.qty {
+   width: 50px;
+   margin-right: 10px;
+}
+
+.cart-total,
+.more-btn {
+   width: 100%;
+   text-align: center;
+}
+
+.btn {
+   display: inline-block;
+   padding: 10px 20px;
+   margin: 10px;
+   text-decoration: none;
+   color: #fff;
+   background-color: #007bff;
+   border: none;
+   border-radius: 5px;
+}
+
+.disabled {
+   pointer-events: none;
+   opacity: 0.5;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+   .table label {
+       font-size: 14px;
+   }
+
+   .box img {
+       width: 60px;
+       height: 60px;
+   }
+
+   .name {
+       flex-basis: 25%;
+   }
+
+   .qty {
+       width: 40px;
+       border: 1px solid black;
+   }
+
+   .btn {
+       padding: 8px 16px;
+       margin: 8px;
+   }
+}
+
+@media (max-width: 480px) {
+   .table label {
+       font-size: 12px;
+   }
+
+   .box img {
+       width: 50px;
+       height: 50px;
+   }
+
+   .name {
+       flex-basis: 20%;
+   }
+
+   .qty {
+       width: 30px;
+   }
+
+   .btn {
+       padding: 6px 12px;
+       margin: 6px;
+   }
+}
+
+
+/*  */
+#btn{
+   margin-top: 2rem;
+   }
+   
+   input{
+   padding: 8px;
+   border-radius: 3px;
+   }
+      
+   
+   /* responsive card */
+   
+   .productslist .box{
+      background-color: yellow;
+      margin-bottom: -1rem;
+      border: 1px solid black;
+   }
+   img{
+      margin-left: 5rem;
+   }
+   .name{
+      font-size: 15px;
+      color: red;
+      /* margin-right:10rem; */
+      margin-left: 15rem;
+   }
+   .price{
+      margin-right: 27rem;
+   }
+   .qty{
+      margin-left: -12rem;
+   }
+       
+   .update{
+      margin-right: 14rem;
+   }
+   
+   .car{
+      margin-right:8rem;
+   }
+   
+   button{
+      padding: 10px;
+      border-radius: 5px;
+      background-color: red;
+   }
+   
+   .table{
+      font-size: 20px;
+      margin-bottom: -0.1rem;
+      border-right: 1px solid black;
+   }
+   .flex{
+      font-size: 15px;
+   }
+   
+   @media only screen and (max-width: 768px) {
+      .name, .price, .qty, .update, .car {
+         margin-left: 0;
+         margin-right: 0;
+      }
+     
+   
+      .name{
+         margin-left: 10rem;
+      }
+      
+      .price {
+         margin-right: -20px;
+      }
+      
+      .qty {
+         margin-left: 13rem;
+      }
+      
+      .update {
+         margin-right: 10rem;
+      }
+   }

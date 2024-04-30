@@ -1,0 +1,56 @@
+.about {
+   padding: 50px 0;
+   font-family: "Fira Sans", sans-serif;
+   font-weight: 400;
+   font-style: normal;
+}
+
+
+
+.about .row {
+   display: flex;
+   flex-direction: row;
+   align-items: center;
+   justify-content: space-between;
+}
+
+.about .image img {
+
+   width: 34rem;
+   height: auto;
+   margin-right: 20px;
+}
+
+.about .content {
+   flex: 40;
+}
+
+.about h3 {
+   font-size: 24px;
+   margin-bottom: 20px;
+}
+
+.about p {
+   font-size: 16px;
+   text-align: justify;
+   margin-right: 5rem;
+}
+
+.h4 {
+   font-size: 3rem;
+   color: red;
+   margin-bottom: 1rem;
+
+}
+
+/* Responsive styles */
+@media screen and (max-width: 768px) {
+   .about .row {
+      flex-direction: column;
+   }
+
+   .about .image img {
+      margin-right: 0;
+      margin-bottom: 20px;
+   }
+}
