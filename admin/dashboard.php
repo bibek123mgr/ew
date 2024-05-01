@@ -48,9 +48,14 @@ if (!isset($_SESSION['admin_id'])) {
          <div class="box">
             <?php
             $total_pendings = 0;
-            $select_pendings = mysqli_query($conn, "SELECT total_price FROM `orders` WHERE payment_status = 'pending'");
+$select_pendings = mysqli_query($conn, "SELECT o.amount, pd.* 
+                                         FROM `orderss` AS o 
+                                         INNER JOIN `paymentdetails` AS pd 
+                                         ON o.paymentId = pd.id 
+                                         WHERE o.orderStatus != 'delivered' 
+                                         AND pd.paymentStatus = 'unpaid'");
             while ($fetch_pendings = mysqli_fetch_assoc($select_pendings)) {
-               $total_pendings += $fetch_pendings['total_price'];
+               $total_pendings += $fetch_pendings['amount'];
             }
             ?>
             <h3><span>Rs</span><?= $total_pendings; ?><span>/-</span></h3>
@@ -61,9 +66,14 @@ if (!isset($_SESSION['admin_id'])) {
          <div class="box">
             <?php
             $total_completes = 0;
-            $select_completes = mysqli_query($conn, "SELECT total_price FROM `orders` WHERE payment_status = 'completed'");
+            $select_completes = mysqli_query($conn, "SELECT o.amount, pd.* 
+                                         FROM `orderss` AS o 
+                                         INNER JOIN `paymentdetails` AS pd 
+                                         ON o.paymentId = pd.id 
+                                         WHERE o.orderStatus = 'delivered' 
+                                         AND pd.paymentStatus = 'paid'");
             while ($fetch_completes = mysqli_fetch_assoc($select_completes)) {
-               $total_completes += $fetch_completes['total_price'];
+               $total_completes += $fetch_completes['amount'];
             }
             ?>
             <h3><span>Rs</span><?= $total_completes; ?><span>/-</span></h3>
@@ -73,7 +83,7 @@ if (!isset($_SESSION['admin_id'])) {
 
          <div class="box">
             <?php
-            $select_orders = mysqli_query($conn, "SELECT * FROM `orders`");
+            $select_orders = mysqli_query($conn, "SELECT * FROM `orderss`");
             $numbers_of_orders = mysqli_num_rows($select_orders);
             ?>
             <h3><?= $numbers_of_orders; ?></h3>

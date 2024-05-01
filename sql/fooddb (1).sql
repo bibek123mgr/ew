@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 30, 2024 at 06:10 PM
+-- Generation Time: May 01, 2024 at 06:14 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -61,6 +61,7 @@ CREATE TABLE `carts` (
 --
 
 INSERT INTO `carts` (`id`, `userid`, `pid`, `name`, `price`, `quantity`, `image`) VALUES
+('6d6f88e6-075e-11ef-8a6a-98e74305e27c', 'a07d9cf2-05c1-11ef-9ec9-98e74305e27c', 'adf08299-0644-11ef-8c37-98e74305e27c', 'Olga Patterson', 893, 1, 'fooddfd0.jpg'),
 ('a1df576f-058c-11ef-8620-98e74305e27c', '0ab00048-058c-11ef-8620-98e74305e27c', '37a7ffa4-04a9-11ef-a18b-98e74305e27c', 'momo', 999, 1, 'cuisine-food-india-indian-wallpaper-preview.jpg');
 
 -- --------------------------------------------------------
@@ -87,8 +88,7 @@ INSERT INTO `categories` (`id`, `name`) VALUES
 ('d3caa5b7-04a2-11ef-a18b-98e74305e27c', 'japanese'),
 ('d3caa5cb-04a2-11ef-a18b-98e74305e27c', 'french'),
 ('d3caa5df-04a2-11ef-a18b-98e74305e27c', 'thai'),
-('d3caa639-04a2-11ef-a18b-98e74305e27c', 'mediterranean'),
-('d3caa64e-04a2-11ef-a18b-98e74305e27c', 'korean');
+('d3caa639-04a2-11ef-a18b-98e74305e27c', 'mediterranean');
 
 -- --------------------------------------------------------
 
@@ -124,6 +124,26 @@ CREATE TABLE `messages` (
   `number` varchar(12) NOT NULL,
   `message` varchar(500) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `notifications`
+--
+
+CREATE TABLE `notifications` (
+  `id` varchar(100) NOT NULL DEFAULT uuid(),
+  `message` varchar(255) NOT NULL,
+  `userId` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `notifications`
+--
+
+INSERT INTO `notifications` (`id`, `message`, `userId`) VALUES
+('3269a461-0770-11ef-8a6a-98e74305e27c', 'Your order (ID: afccd744764ebe7a6f117223077dbde4) has been ontheway.', 'a07d9cf2-05c1-11ef-9ec9-98e74305e27c'),
+('399f5c51-0770-11ef-8a6a-98e74305e27c', 'Your order (ID: afccd744764ebe7a6f117223077dbde4) has been ontheway.', 'a07d9cf2-05c1-11ef-9ec9-98e74305e27c');
 
 -- --------------------------------------------------------
 
@@ -169,7 +189,7 @@ CREATE TABLE `orderss` (
 --
 
 INSERT INTO `orderss` (`id`, `orderStatus`, `amount`, `userId`, `paymentId`, `createdAt`, `quantity`, `shippingAddress`, `phoneNumber`) VALUES
-('afccd744764ebe7a6f117223077dbde4', 'delivered', 615, 'a07d9cf2-05c1-11ef-9ec9-98e74305e27c', '9a9abf4e5773f7f1b51d0160eab64861', '2024-04-30 13:10:08', 1, 'cdcdscsdv', '80980796');
+('afccd744764ebe7a6f117223077dbde4', 'ontheway', 615, 'a07d9cf2-05c1-11ef-9ec9-98e74305e27c', '9a9abf4e5773f7f1b51d0160eab64861', '2024-05-01 04:06:33', 1, 'cdcdscsdv', '80980796');
 
 -- --------------------------------------------------------
 
@@ -282,6 +302,13 @@ ALTER TABLE `messages`
   ADD KEY `fr_user_id` (`userId`);
 
 --
+-- Indexes for table `notifications`
+--
+ALTER TABLE `notifications`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `frk_userId` (`userId`);
+
+--
 -- Indexes for table `orderdetails`
 --
 ALTER TABLE `orderdetails`
@@ -338,6 +365,12 @@ ALTER TABLE `forgetrequest`
 --
 ALTER TABLE `messages`
   ADD CONSTRAINT `fr_user_id` FOREIGN KEY (`userId`) REFERENCES `users` (`id`);
+
+--
+-- Constraints for table `notifications`
+--
+ALTER TABLE `notifications`
+  ADD CONSTRAINT `frk_userId` FOREIGN KEY (`userId`) REFERENCES `users` (`id`);
 
 --
 -- Constraints for table `orderdetails`

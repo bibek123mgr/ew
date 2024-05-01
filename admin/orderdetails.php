@@ -21,26 +21,37 @@ $userDetail=mysqli_fetch_assoc($fetchUser);
 $fetchpaymentDetails = mysqli_query($conn, "SELECT * FROM `paymentdetails` WHERE id='$paymentId'");
 $paymentDetails = mysqli_fetch_assoc($fetchpaymentDetails);
 
-if (isset($_POST['update_orderStatus'])) {
-    $order_status = $_POST['order_status'];
-    $update_status_query = "UPDATE `orderss` SET orderStatus = '$order_status' WHERE id = '$id'";
-    $update_status_result = mysqli_query($conn, $update_status_query);
- 
-    if ($update_status_result) {
-       $message[] = 'order status updated!';
-    } else {
-       $message[] = 'Error updating order status: ' . mysqli_error($conn);
-    }
- }
- 
- if(isset($_POST['update_paymentStatus'])){
-    $payment_status = $_POST['payment_status'];
-    $update =mysqli_query($conn,"UPDATE `paymentDetails` set paymentStatus= '$payment_status' WHERE id='$paymentId'");
-    if(!$update){
-       $message[] = 'Error updating payment status';
-    }
-    $message[] = 'payment status updated!';
- }
+ if (isset($_POST['update_orderStatus'])) {
+    $id=$_GET['orderId'];
+   $order_status = $_POST['order_status'];
+   
+   // Update order status
+   $update_status_query = "UPDATE `orderss` SET orderStatus = '$order_status' WHERE id = '$id'";
+   $update_status_result = mysqli_query($conn, $update_status_query);
+   
+   if ($update_status_result) {
+      $message[] = 'Order status updated!';
+      
+      // Fetch user ID
+      $select_order_query = "SELECT * FROM `orderss` WHERE id = '$id'";
+      $select_order_result = mysqli_query($conn, $select_order_query);
+      $order = mysqli_fetch_assoc($select_order_result);
+      $userId = $order['userId'];
+
+      // Notification message
+      $notification_message = "Your order (ID: $id) is $order_status.";
+      
+      // Insert notification
+      $insert_notification_query = "INSERT INTO `notifications` (message, userId) VALUES ('$notification_message', '$userId')";
+      $insert_notification_result = mysqli_query($conn, $insert_notification_query);
+      
+      if (!$insert_notification_result) {
+         $message[] = 'Error inserting notification: ' . mysqli_error($conn);
+      }
+   } else {
+      $message[] = 'Error updating order status: ' . mysqli_error($conn);
+   }
+}
 ?>
 
 <!DOCTYPE html>

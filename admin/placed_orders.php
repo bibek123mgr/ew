@@ -14,15 +14,35 @@ if (!isset($admin_id)) {
 if (isset($_POST['update_orderStatus'])) {
    $order_id = $_POST['order_id'];
    $order_status = $_POST['order_status'];
+   
+   // Update order status
    $update_status_query = "UPDATE `orderss` SET orderStatus = '$order_status' WHERE id = '$order_id'";
    $update_status_result = mysqli_query($conn, $update_status_query);
-
+   
    if ($update_status_result) {
-      $message[] = 'order status updated!';
+      $message[] = 'Order status updated!';
+      
+      // Fetch user ID
+      $select_order_query = "SELECT * FROM `orderss` WHERE id = '$order_id'";
+      $select_order_result = mysqli_query($conn, $select_order_query);
+      $order = mysqli_fetch_assoc($select_order_result);
+      $userId = $order['userId'];
+
+      // Notification message
+      $notification_message = "Your order (ID: $id) is $order_status.";
+      
+      // Insert notification
+      $insert_notification_query = "INSERT INTO `notifications` (message, userId) VALUES ('$notification_message', '$userId')";
+      $insert_notification_result = mysqli_query($conn, $insert_notification_query);
+      
+      if (!$insert_notification_result) {
+         $message[] = 'Error inserting notification: ' . mysqli_error($conn);
+      }
    } else {
       $message[] = 'Error updating order status: ' . mysqli_error($conn);
    }
 }
+
 
 if(isset($_POST['update_paymentStatus'])){
    $payment_id = $_POST['payment_id'];

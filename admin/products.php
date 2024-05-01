@@ -12,10 +12,11 @@ if (!isset($admin_id)) {
 
 if (isset($_POST['add_product'])) {
 
-    $name = $_POST['name'];
-    $price = $_POST['price'];
-    $category = $_POST['category'];
-    $description = $_POST['description'];
+$name = strtolower($_POST['name']);
+$price = strtolower($_POST['price']);
+$category = strtolower($_POST['category']);
+$description = strtolower($_POST['description']);
+
 
     $image = $_FILES['image']['name'];
     $image_tmp_name = $_FILES['image']['tmp_name'];

@@ -189,26 +189,41 @@
                     if (isset($userName)) {
                         $firstLetter = strtoupper(substr($userName, 0, 1));
                     ?>
-                        <a href="../pages/profile.php" style='width: 35px; height: 35px; border-radius: 50%; background-color: blue; color: white; display: flex; justify-content: center; align-items: center;'>
+                        <a href="../pages/profile.php" style='width: 35px; height: 35px;text-decoration:none; border-radius: 50%; background-color: blue; color: white; display: flex; justify-content: center; align-items: center;'>
                             <?php echo $firstLetter; ?>
                         </a>
 
                     <?php
                     }
                     ?>
-
-                    <a href="../pages/cart.php"><img src="../assets/cart.png" alt="cart_icon" style="height:25px;" id="toggle_cart"></a>
-                    <a onclick="toggleMenu()" id="toggle_btn"><img src="../assets/menu.png" alt="menu" style="height:25px"></a>
+<?php
+    if(!isset($userId)){
+        echo '<a href="../pages/cart.php"><img src="../assets/cart.png" alt="cart_icon" style="height:25px;" id="toggle_cart"></a>';
+    } else {
+        echo '<a href="../pages/cart.php"><img src="../assets/cart.png" alt="cart_icon" style="height:25px;" id="toggle_cart"></a>';
+        $sql = mysqli_query($conn, "select * from `carts` where userid='$userId'");
+        if($row = mysqli_num_rows($sql) > 0) {
+             echo "<span style='color:white;font-size:15px;'>$row</span>";
+        } else {
+            echo "";
+        }
+    }
+?>                   <a onclick="toggleMenu()" id="toggle_btn"><img src="../assets/menu.png" alt="menu" style="height:25px;text-decoration:none"></a>
                 </div>
             </div>
 
             <div class="right_nav">
                 <ul class='menu'>
                     <li><a href="../pages/home.php">Home</a></li>
-                    <li><a href="../pages/Orders.php">order</a></li>
+                    <?php
+                     if (isset($userId)) {
+                    echo '<li><a href="../pages/Orders.php">order</a></li>';
+                     }
+                     ?>
                     <li><a href="../pages/about_more_page.php">About</a></li>
                     <li><a href="../pages/contact.php">Contact</a></li>
                     <li><a href="../pages/services.php">Our Services</a></li>
+
                 </ul>
                 <div class='search_bar'>
                     <form action="" method="POST">
@@ -217,6 +232,7 @@
                     </form>
                 </div>
                 <ul class='user'>
+
                     <li>
                         <?php
                         if (isset($userId)) {
@@ -228,7 +244,35 @@
                         ?>
 
                     </li>
-                    <li><a href="../pages/cart.php"><img src="../assets/cart.png" alt="cart_icon" style="height:25px;"></a></li>
+
+                    <li>
+                <?php
+    if(!isset($userId)){
+        echo '<a href="../pages/cart.php"><img src="../assets/cart.png" alt="cart_icon" style="height:25px;" id="toggle_cart"></a>';
+    } else {
+        echo '<a href="../pages/cart.php"><img src="../assets/cart.png" alt="cart_icon" style="height:25px;" id="toggle_cart"></a>';
+        $sql = mysqli_query($conn, "select * from `carts` where userid='$userId'");
+        if($row = mysqli_num_rows($sql) > 0) {
+             echo "<span style='color:white;font-size:15px;'>$row</span>";
+        } else {
+            echo "";
+        }
+    }
+?>  </li>
+         <li>
+            <?php
+              if(isset($userId)){
+              echo' <a href="../pages/notification.php"><img src="../assets/notification.png" alt="" style="height:35px"></a>';
+              $sql=mysqli_query($conn,"SELECT * from `notifications` Where userId='$userId'");
+
+              if($row=mysqli_num_rows($sql)>0){
+             echo "<span style='color:white;font-size:15px;'>$row</span>";
+              }
+              }else{
+                echo "";
+              }
+          ?>
+        </li>
                     <?php if (isset($userName)) : ?>
                         <li id="profile">
                             <a href="../pages/profile.php">
@@ -256,6 +300,11 @@
             <li><a href="../pages/home.php">Home</a></li>
             <li><a href="../pages/orders.php">Order</a></li>
             <li><a href="./pages/about_more_page.php">About</a></li>
+                                <?php
+                     if (isset($userId)) {
+                    echo '<li><a href="../pages/Orders.php">order</a></li>';
+                     }
+                     ?>
             <!-- <li><a href="../pages/contact.php">Contact</a></li> -->
             <li><a href="../pages/services.php">Our Services</a></li>
         </ul>
