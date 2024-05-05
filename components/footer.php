@@ -32,6 +32,7 @@
          text-decoration: none;
          margin: 0 5px;
          transition: color 0.3s;
+         font-size: 18px;
       }
 
       .footer-links a:hover {
@@ -44,6 +45,7 @@
 
       .contact-info p {
          margin-bottom: 5px;
+         font-size: 18px;
       }
 
       .social-icons {
@@ -75,6 +77,9 @@
 
       a {
          cursor: pointer;
+      }
+      .containerS{
+         width: 100%;
       }
    </style>
 </head>

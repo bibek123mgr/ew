@@ -13,17 +13,16 @@ if (isset($_POST['Delete'])) {
     if (empty($user_input_password)) {
         $error = "Please enter your password";
     } else {
-        $sql = "SELECT password FROM users WHERE id=$userId";
+        $sql = "SELECT * FROM `users` WHERE id='$userId'";
         $result = mysqli_query($conn, $sql);
-
         if ($result && mysqli_num_rows($result) > 0) {
             $row = mysqli_fetch_assoc($result);
             $old_password = $row['password'];
 
-            if ($old_password !== $user_input_password) {
+            if (!password_verify($user_input_password,$old_password)) {
                 $error = 'Invalid Password';
             } else {
-                $delete_sql = "DELETE FROM users WHERE id=$userId";
+                $delete_sql = "DELETE FROM users WHERE id='$userId'";
                 $delete_result = mysqli_query($conn, $delete_sql);
 
                 if ($delete_result) {

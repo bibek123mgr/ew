@@ -91,9 +91,7 @@ if (isset($_GET['delete'])) {
 <body>
 
     <?php include './admin_header.php' ?>
-
     <section class="add">
-
         <form action="" method="POST" enctype="multipart/form-data">
             <h1>Add Product</h1>
             <input type="text" required placeholder="enter product name" name="name" maxlength="100" class="box" id="box">
@@ -115,8 +113,6 @@ if (isset($_GET['delete'])) {
                 }
                 ?>
             </select>
-
-
             <input type="file" name="image" class="box" accept="image/jpg, image/jpeg, image/png, image/webp" required id="box">
             <textarea name="description" id="description" name="description" class="description" rows="8" required minlength="100" style="resize: none;"></textarea>
             <input type="submit" value="add product" name="add_product" class="button">
@@ -321,10 +317,9 @@ if (isset($_GET['delete'])) {
         .delete-btn:hover {
             background-color: #0056b3;
         }
+
     </style>
 
-    <!-- custom js file link  -->
-    <script src="../js/admin_script.js"></script>
 
 </body>
 

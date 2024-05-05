@@ -1,8 +1,9 @@
 <?php
 session_start();
 require('../connection.php');
-
-
+    if (isset($_GET['productId'])) {
+        $pid = $_GET['productId'];
+    }
 ?>
 
 <!DOCTYPE html>
@@ -27,8 +28,6 @@ require('../connection.php');
    <section class="quick-view">
     <div class="prod">
         <?php
-        if (isset($_GET['productId'])) {
-            $pid = $_GET['productId'];
             $select_product = mysqli_query($conn, "SELECT * FROM `products` WHERE id = '$pid'");
             if (!$select_product) {
                 die("Error fetching product details: " . mysqli_error($conn));
@@ -37,6 +36,9 @@ require('../connection.php');
                 $product = mysqli_fetch_assoc($select_product);
         ?>
                 <form class="product_cart"   method="post">
+                        <input type="hidden" name="image" value="<?= $product['image']; ?>">
+                         <input type="hidden" name="name" value="<?= $product['name']; ?>">
+                         <input type="hidden" name="price" value="<?= $product['price']; ?>">
                     <div class="product-details">
                         <div class="product">
                         <img src="../uploaded_img/<?= $product['image']; ?>" alt="">
@@ -56,9 +58,6 @@ require('../connection.php');
             } else {
                 echo '<p>No product found!</p>';
             }
-        } else {
-            echo '<p>Product ID not provided!</p>';
-        }
             ?>
 
 </div>
@@ -181,24 +180,21 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['submit'])) {
             $Image = $_POST['image'];
             $Name = $_POST['name'];
             $Price = $_POST['price'];
-            $pid = $_POST['pid'];
             $number=$_POST['number'];
-
-            // Check if product is already in the cart
-            $query = "SELECT * FROM `carts` WHERE userid='$userId' AND pid='$pid'";
+            $query = "SELECT * FROM `carts` WHERE userid='$userId' AND pid ='$pid'";
             $result = mysqli_query($conn, $query);
             if ($result && mysqli_num_rows($result) > 0) {
                 $row = mysqli_fetch_assoc($result);
                 $newQuantity = $row['quantity'] + $number;
-                $newPrice = $row['price'] + $Price;
-                $updateQuery = "UPDATE `carts` SET quantity='$newQuantity', price='$newPrice' WHERE userid='$userId' AND pid='$pid'";
+                // $newPrice = $row['price'] + $Price;
+                $updateQuery = "UPDATE `carts` SET quantity='$newQuantity' WHERE userid='$userId' AND pid='$pid'";
                 if (mysqli_query($conn, $updateQuery)) {
-                    header("Location: " . $_SERVER['PHP_SELF']);
-                    exit();
+                echo "<script>alert('product adds in cart');window.location='./singleproduct.php?productId=" . $_GET['productId'] . "'</script>";
+                exit();
                 }
             }
             // Insert data into the cart table
-            $sql = "INSERT INTO carts (name, price, quantity, image, pid, userid) 
+            $sql = "INSERT INTO `carts` (name, price, quantity, image, pid, userid) 
                     VALUES ('$Name', '$Price', '$number', '$Image', '$pid', '$userId')";
             if (!mysqli_query($conn, $sql)) {
                 echo "Error: " . $sql . "<br>" . mysqli_error($conn);

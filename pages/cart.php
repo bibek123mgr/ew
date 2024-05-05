@@ -137,7 +137,6 @@ $grand_total = 0;
             </div>
         </section>
     </div>
-    <?php include '../components/footer.php'; ?>
     <script src="js/script.js"></script>
 
     <style>

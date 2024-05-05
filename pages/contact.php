@@ -2,8 +2,7 @@
 
 include '../connection.php';
 session_start();
-
-$user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : '';
+include '../components/fetchdata.php';
 
 if (isset($_POST['send'])) {
    $name = $_POST['name'];
@@ -11,23 +10,28 @@ if (isset($_POST['send'])) {
    $number = $_POST['number'];
    $msg = $_POST['msg'];
 
+   if(!isset($userId)){
+    $message[] = 'register only sent message!';
+
+   }else{
    // Check if the message already exists
    $select_message_query = "SELECT * FROM `messages` WHERE name = '$name' AND email = '$email' AND number = '$number' AND message = '$msg'";
    $select_message_result = mysqli_query($conn, $select_message_query);
 
    if (mysqli_num_rows($select_message_result) > 0) {
-      $message = 'Message already sent!';
+      $message[] = 'Message already sent!';
    } else {
       // Insert the new message
-      $insert_message_query = "INSERT INTO `messages` (user_id, name, email, number, message) VALUES ('$user_id', '$name', '$email', '$number', '$msg')";
+      $insert_message_query = "INSERT INTO `messages` (userId, name, email, number, message) VALUES ('$userId', '$name', '$email', '$number', '$msg')";
       $insert_message_result = mysqli_query($conn, $insert_message_query);
 
       if ($insert_message_result) {
-         $message = 'Message sent successfully!';
+         $message[] = 'Message sent successfully!';
       } else {
-         $message = 'Error sending message: ' . mysqli_error($conn);
+         $message[] = 'Error sending message: ' . mysqli_error($conn);
       }
    }
+}
 }
 
 ?>

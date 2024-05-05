@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 01, 2024 at 06:14 AM
+-- Generation Time: May 05, 2024 at 04:21 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -55,14 +55,6 @@ CREATE TABLE `carts` (
   `quantity` int(10) NOT NULL,
   `image` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `carts`
---
-
-INSERT INTO `carts` (`id`, `userid`, `pid`, `name`, `price`, `quantity`, `image`) VALUES
-('6d6f88e6-075e-11ef-8a6a-98e74305e27c', 'a07d9cf2-05c1-11ef-9ec9-98e74305e27c', 'adf08299-0644-11ef-8c37-98e74305e27c', 'Olga Patterson', 893, 1, 'fooddfd0.jpg'),
-('a1df576f-058c-11ef-8620-98e74305e27c', '0ab00048-058c-11ef-8620-98e74305e27c', '37a7ffa4-04a9-11ef-a18b-98e74305e27c', 'momo', 999, 1, 'cuisine-food-india-indian-wallpaper-preview.jpg');
 
 -- --------------------------------------------------------
 
@@ -137,14 +129,6 @@ CREATE TABLE `notifications` (
   `userId` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `notifications`
---
-
-INSERT INTO `notifications` (`id`, `message`, `userId`) VALUES
-('3269a461-0770-11ef-8a6a-98e74305e27c', 'Your order (ID: afccd744764ebe7a6f117223077dbde4) has been ontheway.', 'a07d9cf2-05c1-11ef-9ec9-98e74305e27c'),
-('399f5c51-0770-11ef-8a6a-98e74305e27c', 'Your order (ID: afccd744764ebe7a6f117223077dbde4) has been ontheway.', 'a07d9cf2-05c1-11ef-9ec9-98e74305e27c');
-
 -- --------------------------------------------------------
 
 --
@@ -164,7 +148,9 @@ CREATE TABLE `orderdetails` (
 --
 
 INSERT INTO `orderdetails` (`id`, `productId`, `orderId`, `quantity`, `price`) VALUES
-('0add4ba9-06db-11ef-a255-98e74305e27c', '1cb1214e-06d8-11ef-a255-98e74305e27c', 'afccd744764ebe7a6f117223077dbde4', 1, 615);
+('720737a9-0aea-11ef-9501-98e74305e27c', '1cb1214e-06d8-11ef-a255-98e74305e27c', 'a0cc16c51cf9f7dacc2294a19c3f703b', 1, 30),
+('720788ba-0aea-11ef-9501-98e74305e27c', 'adf08299-0644-11ef-8c37-98e74305e27c', 'a0cc16c51cf9f7dacc2294a19c3f703b', 1, 300),
+('8ac40f29-0ae9-11ef-9501-98e74305e27c', '1cb1214e-06d8-11ef-a255-98e74305e27c', '805ca376fa237118ef70a17aa81abb3b', 5, 30);
 
 -- --------------------------------------------------------
 
@@ -189,7 +175,8 @@ CREATE TABLE `orderss` (
 --
 
 INSERT INTO `orderss` (`id`, `orderStatus`, `amount`, `userId`, `paymentId`, `createdAt`, `quantity`, `shippingAddress`, `phoneNumber`) VALUES
-('afccd744764ebe7a6f117223077dbde4', 'ontheway', 615, 'a07d9cf2-05c1-11ef-9ec9-98e74305e27c', '9a9abf4e5773f7f1b51d0160eab64861', '2024-05-01 04:06:33', 1, 'cdcdscsdv', '80980796');
+('805ca376fa237118ef70a17aa81abb3b', 'pending', 150, 'a07d9cf2-05c1-11ef-9ec9-98e74305e27c', 'c5ed2c185ec35c6107f19efc0233e0f2', '2024-05-05 14:12:44', 5, 'hjhjkbkjkjkjh', '98008'),
+('a0cc16c51cf9f7dacc2294a19c3f703b', 'pending', 330, 'a07d9cf2-05c1-11ef-9ec9-98e74305e27c', '9e665f4943b31b37b2a9d6803d4d61c6', '2024-05-05 14:19:12', 2, 'hjhjkbkjkjkjh', '98008');
 
 -- --------------------------------------------------------
 
@@ -209,7 +196,8 @@ CREATE TABLE `paymentdetails` (
 --
 
 INSERT INTO `paymentdetails` (`id`, `paymentMethod`, `paymentStatus`, `pidx`) VALUES
-('9a9abf4e5773f7f1b51d0160eab64861', 'cod', 'unpaid', NULL);
+('9e665f4943b31b37b2a9d6803d4d61c6', 'khalti', 'paid', '9NvA8DcBQVFf3qYrP38GNo'),
+('c5ed2c185ec35c6107f19efc0233e0f2', 'cod', 'unpaid', NULL);
 
 -- --------------------------------------------------------
 
@@ -231,8 +219,8 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`id`, `name`, `price`, `image`, `description`, `categoryID`) VALUES
-('1cb1214e-06d8-11ef-a255-98e74305e27c', 'Zahir Jenkins', 615, 'fooddfd1user.jpg', 'Est deleniti consect Est deleniti consectEst deleniti consectEst deleniti consectEst deleniti consectEst deleniti consectEst deleniti consectEst deleniti consectEst deleniti consect', 'd3caa59e-04a2-11ef-a18b-98e74305e27c'),
-('adf08299-0644-11ef-8c37-98e74305e27c', 'Olga Patterson', 893, 'fooddfd0.jpg', 'In sit amet et cum In sit amet et cumIn sit amet et cumIn sit amet et cumIn sit amet et cumIn sit amet et cumIn sit amet et cumIn sit amet et cumIn sit amet et cumIn sit amet et cumIn sit amet et cumIn sit amet et cumIn sit amet et cumIn sit amet et cumIn sit amet et cumIn sit amet et cumIn sit amet et cumIn sit amet et cumIn sit amet et cumIn sit amet et cumIn sit amet et cum', 'd3caa5b7-04a2-11ef-a18b-98e74305e27c');
+('1cb1214e-06d8-11ef-a255-98e74305e27c', 'Zahir Jenkins', 30, 'Screenshot (4).png', 'Est deleniti consect Est deleniti consectEst deleniti consectEst deleniti consectEst deleniti consectEst deleniti consectEst deleniti consectEst deleniti consectEst deleniti consect', 'd3ca9072-04a2-11ef-a18b-98e74305e27c'),
+('adf08299-0644-11ef-8c37-98e74305e27c', 'Olga Patterson', 300, 'fooddfd0.jpg', 'In sit amet et cum In sit amet et cumIn sit amet et cumIn sit amet et cumIn sit amet et cumIn sit amet et cumIn sit amet et cumIn sit amet et cumIn sit amet et cumIn sit amet et cumIn sit amet et cumIn sit amet et cumIn sit amet et cumIn sit amet et cumIn sit amet et cumIn sit amet et cumIn sit amet et cumIn sit amet et cumIn sit amet et cumIn sit amet et cumIn sit amet et cum', 'd3ca9072-04a2-11ef-a18b-98e74305e27c');
 
 -- --------------------------------------------------------
 
@@ -261,7 +249,7 @@ INSERT INTO `users` (`id`, `name`, `email`, `number`, `password`, `address`, `ge
 ('09922b85-055e-11ef-8620-98e74305e27c', 'pacicojiq@mailinator', 'rawi@mailinator.com', '', '$2y$10$Xaj8CKs3za6q4s0EpS8ezuZ87ePRiuFoVRUmdyBBvnS9ZZv8VEUdu', '', NULL, 1, NULL, 408212),
 ('0ab00048-058c-11ef-8620-98e74305e27c', 'xyqoxi@mailinator.co', 'guqibaki@mailinator.com', 'sdcsdcscsd', '$2y$10$wztp8vsr2cBJYO8skHFZv.P9mjQml8YFwT1U3AqaSHzifh7BgxAB.', 'csdcsdcdc', 'male', 1, '2024-04-12', 298044),
 ('8e4739fc-055c-11ef-8620-98e74305e27c', 'name', 'hoqypuw@mailinator.com', '', '$2y$10$.0or1MGCQF4WakjQr8smzONBDfIQ0QavjG7GKPxsO94peaLFnnA86', '', NULL, 1, NULL, 126629),
-('a07d9cf2-05c1-11ef-9ec9-98e74305e27c', 'puteni@mailinator.co', 'calykocem@mailinator.com', '80980796', '$2y$10$Y3fyeZsksx/emxxXzMIYD.TFN15Dvwq8FWPR0SjC2N.O.HaiNyHL2', 'cdcdscsdv', 'male', 1, '2024-04-11', 799711);
+('a07d9cf2-05c1-11ef-9ec9-98e74305e27c', 'bibek magar', 'calykocem@mailinator.com', '98008', '$2y$10$Y3fyeZsksx/emxxXzMIYD.TFN15Dvwq8FWPR0SjC2N.O.HaiNyHL2', 'hjhjkbkjkjkjh', 'male', 1, '2024-04-11', 799711);
 
 --
 -- Indexes for dumped tables

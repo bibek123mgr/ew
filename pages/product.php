@@ -185,8 +185,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['submit'])) {
             if ($result && mysqli_num_rows($result) > 0) {
                 $row = mysqli_fetch_assoc($result);
                 $newQuantity = $row['quantity'] + 1;
-                $newPrice = $row['price'] + $Price;
-                $updateQuery = "UPDATE `carts` SET quantity='$newQuantity', price='$newPrice' WHERE userid='$userId' AND pid='$pid'";
+                // $newPrice = $row['price'] + $Price;
+                $updateQuery = "UPDATE `carts` SET quantity='$newQuantity'WHERE userid='$userId' AND pid='$pid'";
                 if (mysqli_query($conn, $updateQuery)) {
                     header("Location: " . $_SERVER['PHP_SELF']);
                     exit();

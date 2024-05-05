@@ -18,7 +18,7 @@ if (isset($_POST['submit'])) {
    $dob = ($_POST['dob']);
    $address = ($_POST['address']);
 
-   if (empty($name) || empty($number) || empty($gender) || empty($dob) || empty($address)) {
+   if (empty($name)) {
       $error = "Please fill out all the fields.";
    } else {
       $sql = "UPDATE users SET name='$name', number='$number', gender='$gender', dob='$dob', address='$address' WHERE id='$userId'";
@@ -194,7 +194,7 @@ if ($query && mysqli_num_rows($query) > 0) {
             </div>
             <div class="form-submit">
                <input type="submit" value="Update Changes" name="submit">
-               <a href="../pages/deleteAccount.php">Delete Account</a>
+               <!-- <a href="../pages/deleteAccount.php">Delete Account</a> -->
             </div>
          </form>
       </section>

@@ -2,7 +2,6 @@
 include('../connection.php');
 session_start();
 include('../components/fetchdata.php');
-
 // Check if pidx is set
 if(isset($_GET['pidx'])){
     $pidx = $_GET['pidx'];
@@ -57,84 +56,72 @@ verifypidx($pidx);
 if (isset($_SESSION['transaction_status']) && $_SESSION['transaction_status'] === "success") {
     // Assuming $userId is available somewhere
     if (!empty($userId)) {
-        // Fetch user details
-        $sql_user = "SELECT * FROM users WHERE id='$userId'";
-        $result_user = mysqli_query($conn, $sql_user);
 
-        if (mysqli_num_rows($result_user) > 0) {
-            $fetch_user = mysqli_fetch_assoc($result_user);
-            $name = $fetch_user['name'];
-            $email = $fetch_user['email'];
-            $number = $fetch_user['number'];
-            $address = $fetch_user['address'];
+        $sql = "SELECT * FROM users WHERE id='$userId'";
+$checkquery = mysqli_query($conn, $sql);
 
-            if (empty($number) || empty($address)) {
-                $error = 'Please update your profile';
-            } else {
-                // Fetch cart items
-                $sql = "SELECT * FROM carts WHERE userid='$userId'";
-                $query = mysqli_query($conn, $sql);
-        
-                if ($query && mysqli_num_rows($query) > 0) {
-                    $grandTotal = 0;
-                    $subtotal = 0;
-                    $totalqty = 0;
-                    $orderId=md5(uniqid());
-                    // Insert order into orderss table
-                    $inserOrder = mysqli_query($conn, "INSERT INTO orderss (id,orderStatus, userId, shippingAddress, phoneNumber) VALUES ('$orderId;'pending', '$userId', '$address', '$number')");
-                    if ($inserOrder) {
-                        // Get the order ID of the inserted order
-                        $orderId = mysqli_insert_id($conn);
-                        while ($fetchProduct = mysqli_fetch_assoc($query)) {
-                            $productId = $fetchProduct['pid'];
-                            $quantity = $fetchProduct['quantity'];
-                            $price = $fetchProduct['price'];
-                            $totalqty += $quantity;
-                            $subtotal = $price * $quantity;
-                            $grandTotal += $subtotal;
-                            // Insert order details into orderdetails table
-                            $placeOrder = mysqli_query($conn, "INSERT INTO orderdetails (orderId, productId, quantity, price) VALUES ('$orderId', '$productId', '$quantity', $price)");
-                        }
-                        $paymentId=md5(uniqid());
-                        // Insert payment details into paymentDetails table
-                        $paymentDetails = mysqli_query($conn, "INSERT INTO paymentDetails (id,paymentMethod, paymentStatus, pidx) VALUES ('$paymentId','khalti', 'paid', '$pidx')");
-                        if ($paymentDetails) {
-                            $paymentId = mysqli_insert_id($conn);
-                        } else {
-                            $error[] = "Error inserting payment details.";
-                        }
-                        // Update order with amount, paymentId, and quantity
-                        $update = mysqli_query($conn, "UPDATE orderss SET amount='$grandTotal', paymentId='$paymentId', quantity='$totalqty' WHERE id='$orderId'");
-                        if (!$update) {
-                            $error[] = "Error updating order.";
-                        }
-        
-                        // Delete items from cart
-                        $deleteCartItems = mysqli_query($conn, "DELETE FROM carts WHERE userid='$userId'");
-                        if (!$deleteCartItems) {
-                            $error[] = "Error deleting cart items.";
-                        }
-        
-                        // Redirect to cart page with success message
-                        header("Location: ../pages/cart.php");
-                        exit();
-                    } else {
-                        $error[] = "Error inserting order.";
-                    }
-                } else {
-                    $error[] = "No items in the cart.";
-                }
-            }
-        } else {
-            $error = 'Error fetching user data';
-        }
-    } else {
-        $error = "User ID is empty";
-    }
+if (!$checkquery) {
+    die('Error in fetching user data: ' . mysqli_error($conn));
 }
 
-// If any error occurs, handle it here
-if (isset($error)) {
-    echo implode("<br>", $error);
+if (mysqli_num_rows($checkquery) > 0) {
+    $fetch_user = mysqli_fetch_assoc($checkquery);
+    $name = $fetch_user['name'];
+    $email = $fetch_user['email'];
+
+    // Check if user has updated their profile
+    if (empty($fetch_user['number']) || empty($fetch_user['address']) || empty($fetch_user['gender']) || empty($fetch_user['dob'])) {
+        $error[] = 'Please update your profile';
+    } else {
+        $number = $fetch_user['number'];
+        $address = $fetch_user['address'];
+    }
+} else {
+    $error[] = 'Error fetching user data';
+}
+        // Fetch user details
+       $sql = "SELECT * FROM carts WHERE userid='$userId'";
+        $query = mysqli_query($conn, $sql);
+
+        if ($query && mysqli_num_rows($query) > 0) {
+            $grandTotal = 0;
+            $subtotal = 0;
+            $totalqty = 0;
+            $orderId = md5(uniqid());
+            $inserOrder = mysqli_query($conn, "INSERT INTO `orderss` (id, orderStatus, userId, shippingAddress, phoneNumber) VALUES ('$orderId', 'pending', '$userId', '$address', '$number')");
+            
+            if ($inserOrder) {
+                while ($fetchProduct = mysqli_fetch_assoc($query)) {
+                    $productId = $fetchProduct['pid'];
+                    $quantity = $fetchProduct['quantity'];
+                    $price = $fetchProduct['price'];
+                    $totalqty += $quantity;
+                    $subtotal = $price * $quantity;
+                    $grandTotal += $subtotal;
+                    $placeOrder = mysqli_query($conn, "INSERT INTO orderdetails (orderId, productId, quantity, price) VALUES ('$orderId', '$productId', '$quantity', $price)");
+                }
+                $paymentId = md5(uniqid());
+                $paymentDetails = mysqli_query($conn, "INSERT INTO paymentDetails (id, paymentMethod, paymentStatus,pidx) VALUES ('$paymentId', 'khalti', 'paid','$pidx')");
+                $update = mysqli_query($conn, "UPDATE orderss SET amount=$grandTotal, paymentId='$paymentId', quantity=$totalqty WHERE id='$orderId'");
+                $deleteCartItems = mysqli_query($conn, "DELETE FROM carts WHERE userid='$userId'");
+                echo "<script>alert('Order successfully placed'); window.location='../pages/cart.php';</script>";
+                exit();
+            } else {
+                $error[] = "Error inserting order.";
+            }
+        }
+    }
+
 }
 ?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+</html>

@@ -29,8 +29,7 @@ if (isset($_POST['update_orderStatus'])) {
       $userId = $order['userId'];
 
       // Notification message
-      $notification_message = "Your order (ID: $id) is $order_status.";
-      
+      $notification_message = "Your order (ID: $order_id) is $order_status.";
       // Insert notification
       $insert_notification_query = "INSERT INTO `notifications` (message, userId) VALUES ('$notification_message', '$userId')";
       $insert_notification_result = mysqli_query($conn, $insert_notification_query);

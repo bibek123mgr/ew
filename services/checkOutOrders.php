@@ -58,7 +58,7 @@ if (isset($_POST['placeOrder'])) {
             $subtotal = 0;
             $totalqty = 0;
             $orderId = md5(uniqid());
-            $inserOrder = mysqli_query($conn, "INSERT INTO orderss (id, orderStatus, userId, shippingAddress, phoneNumber) VALUES ('$orderId', 'pending', '$userId', '$address', '$number')");
+            $inserOrder = mysqli_query($conn, "INSERT INTO `orderss` (id, orderStatus, userId, shippingAddress, phoneNumber) VALUES ('$orderId', 'pending', '$userId', '$address', '$number')");
             
             if ($inserOrder) {
                 while ($fetchProduct = mysqli_fetch_assoc($query)) {
@@ -207,10 +207,10 @@ if (isset($_POST['placeOrder'])) {
                 <input type="email" name="email" class="checkoutinput-field" value="<?php echo ($email) ? $email : ''; ?>" required disabled>
 
                 <label class="checkhoutlabel">Address:</label>
-                <input type="text" name="address" class="checkoutinput-field" value="<?php echo ($address) ? $address : ''; ?>" required disabled>
+                <input type="text" name="address" class="checkoutinput-field" value="<?php echo ($address) ? $address : ''; ?>" required>
 
                 <label class="checkhoutlabel">Phone:</label>
-                <input type="tel" name="phone" class="checkoutinput-field" value="<?php echo ($number) ? $number : ''; ?>" required disabled>
+                <input type="number" name="phone" class="checkoutinput-field" value="<?php echo ($number) ? $number : ''; ?>" required>
             </section>
 
             <!-- Payment Method Section -->

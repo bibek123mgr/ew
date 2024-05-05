@@ -202,13 +202,30 @@
     } else {
         echo '<a href="../pages/cart.php"><img src="../assets/cart.png" alt="cart_icon" style="height:25px;" id="toggle_cart"></a>';
         $sql = mysqli_query($conn, "select * from `carts` where userid='$userId'");
-        if($row = mysqli_num_rows($sql) > 0) {
-             echo "<span style='color:white;font-size:15px;'>$row</span>";
-        } else {
-            echo "";
-        }
+$row_count = mysqli_num_rows($sql);
+
+if ($row_count > 0) {
+    echo "<span style='color:white;font-size:15px;'>$row_count</span>";
+} else {
+    echo ""; // No rows, so don't display anything
+}
     }
-?>                   <a onclick="toggleMenu()" id="toggle_btn"><img src="../assets/menu.png" alt="menu" style="height:25px;text-decoration:none"></a>
+?>    
+ <?php
+              if(isset($userId)){
+              echo' <a href="../pages/notification.php"><img src="../assets/notification.png" alt="" style="height:35px"></a>';
+              $sql=mysqli_query($conn,"SELECT * from `notifications` Where userId='$userId'");
+$row_count = mysqli_num_rows($sql);
+
+if ($row_count > 0) {
+    echo "<span style='color:white;font-size:15px;'>$row_count</span>";
+} else {
+    echo ""; // No rows, so don't display anything
+}
+              }
+          ?>
+               <a onclick="toggleMenu()" id="toggle_btn"><img src="../assets/menu.png" alt="menu" style="height:25px;text-decoration:none"></a>
+
                 </div>
             </div>
 
@@ -252,11 +269,13 @@
     } else {
         echo '<a href="../pages/cart.php"><img src="../assets/cart.png" alt="cart_icon" style="height:25px;" id="toggle_cart"></a>';
         $sql = mysqli_query($conn, "select * from `carts` where userid='$userId'");
-        if($row = mysqli_num_rows($sql) > 0) {
-             echo "<span style='color:white;font-size:15px;'>$row</span>";
-        } else {
-            echo "";
-        }
+$row_count = mysqli_num_rows($sql);
+
+if ($row_count > 0) {
+    echo "<span style='color:white;font-size:15px;'>$row_count</span>";
+} else {
+    echo ""; // No rows, so don't display anything
+}
     }
 ?>  </li>
          <li>
@@ -264,12 +283,13 @@
               if(isset($userId)){
               echo' <a href="../pages/notification.php"><img src="../assets/notification.png" alt="" style="height:35px"></a>';
               $sql=mysqli_query($conn,"SELECT * from `notifications` Where userId='$userId'");
+$row_count = mysqli_num_rows($sql);
 
-              if($row=mysqli_num_rows($sql)>0){
-             echo "<span style='color:white;font-size:15px;'>$row</span>";
-              }
-              }else{
-                echo "";
+if ($row_count > 0) {
+    echo "<span style='color:white;font-size:15px;'>$row_count</span>";
+} else {
+    echo ""; // No rows, so don't display anything
+}
               }
           ?>
         </li>
