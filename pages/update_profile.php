@@ -194,7 +194,7 @@ if ($query && mysqli_num_rows($query) > 0) {
             </div>
             <div class="form-submit">
                <input type="submit" value="Update Changes" name="submit">
-               <!-- <a href="../pages/deleteAccount.php">Delete Account</a> -->
+                <!-- <a href="../pages/deleteAccount.php" class="delete">Delete Account</a> -->
             </div>
          </form>
       </section>
@@ -203,3 +203,17 @@ if ($query && mysqli_num_rows($query) > 0) {
 </body>
 
 </html>
+
+<style>
+   .delete{
+      padding: 8px;
+      background-color: red;
+      text-decoration: none;
+      color: black;
+   }
+
+   .delete:hover{
+      color: white;
+      transition: 1s;
+   }
+</style>

@@ -1,73 +1,5 @@
-<?php
-include('../connection.php');
-include('../components/fetchdata.php');
-session_start();
-if (isset($userId)) {
-    header('Location: home.php');
-    exit;
-}
-
-include("../connection.php");
-$error = [];
-
-if (isset($_POST['submit'])) {
-    $email = $_POST['email'];
-    $password = $_POST['password'];
-
-    if (empty($email)) {
-        $error[] = "Please enter your email.";
-    }
-
-    if (empty($password)) {
-        $error[] = "Please enter your password.";
-    }
-
-    if (empty($error)) {
-        $query = "SELECT * FROM `users` WHERE email='$email' LIMIT 1";
-        $result = mysqli_query($conn, $query);
-        if (mysqli_num_rows($result) == 0) {
-            $error[] = "no user exist credentials.";
-        } else {
-            $user_data = mysqli_fetch_assoc($result);
-            if (!password_verify($password, $user_data['password'])) {
-                $error[] = "password doesnot credentials.";
-            }
-        if (empty($error)) {
-            if ($user_data['verified'] == '0') {
-                function generateOTP() {
-                    return rand(100000, 999999);
-                }
-
-                $OTP = generateOTP();
-                $mail = mysqli_query($conn, "UPDATE `users` SET `otp` = '$OTP' WHERE `email` = '$email'");
-                require_once('../services/sendmailfunction.php');
-                $recipient = $email;
-                $subject = 'Email Verification';
-                $body = 'Your OTP is: ' . $OTP . ' Please don\'t share it with anyone.';
-                $result = sendEmail($recipient, $subject, $body);
-                $_SESSION['newRegEmail'] = $email;
-                echo "<script>alert('The OTP has been sent to your email. Please verify.'); window.location='../services/verifyOTP.php';</script>";
-                exit;
-            } else {
-                $_SESSION['user_data'] = $user_data;
-                echo "<script>alert('successfully login to account'); window.location='./home.php';</script>";
-                exit;
-            }
-        }
-    }
-}
-}
-?>
-
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <style>
-        * {
+<style>
+     * {
             margin: 0;
             padding: 0;
 
@@ -186,9 +118,82 @@ if (isset($_POST['submit'])) {
             color: red;
             text-align: center;
         }
+</style>
+
+<?php
+include('../connection.php');
+include('../components/fetchdata.php');
+session_start();
+if (isset($userId)) {
+    header('Location: home.php');
+    exit;
+}
+
+$error = [];
+
+if (isset($_POST['submit'])) {
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+
+    // Email and password validation
+    if (empty($email)) {
+        $error[] = "Please enter your email.";
+    } else if (!preg_match("/^[a-zA-Z0-9._%+-]+@gmail\.com$/", $email)) {
+        $error[] = "Please enter a valid @gmail.com email address.";
+    }
+
+    if (empty($password)) {
+        $error[] = "Please enter your password.";
+    }
+
+    // If no errors, proceed with the login check
+    if (empty($error)) {
+        $query = "SELECT * FROM `users` WHERE email='$email' LIMIT 1";
+        $result = mysqli_query($conn, $query);
+        if (mysqli_num_rows($result) == 0) {
+            $error[] = "No user exists with these credentials.";
+        } else {
+            $user_data = mysqli_fetch_assoc($result);
+            if (!password_verify($password, $user_data['password'])) {
+                $error[] = "Password does not match the credentials.";
+            }
+            if (empty($error)) {
+                if ($user_data['verified'] == '0') {
+                    function generateOTP() {
+                        return rand(100000, 999999);
+                    }
+
+                    $OTP = generateOTP();
+                    $mail = mysqli_query($conn, "UPDATE `users` SET `otp` = '$OTP' WHERE `email` = '$email'");
+                    require_once('../services/sendmailfunction.php');
+                    $recipient = $email;
+                    $subject = 'Email Verification';
+                    $body = 'Your OTP is: ' . $OTP . ' Please don\'t share it with anyone.';
+                    $result = sendEmail($recipient, $subject, $body);
+                    $_SESSION['newRegEmail'] = $email;
+                    echo "<script>alert('The OTP has been sent to your email. Please verify.'); window.location='../services/verifyOTP.php';</script>";
+                    exit;
+                } else {
+                    $_SESSION['user_data'] = $user_data;
+                    echo "<script>alert('Successfully logged in to your account.'); window.location='./home.php';</script>";
+                    exit;
+                }
+            }
+        }
+    }
+}
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        /* Add your CSS styles here */
     </style>
 </head>
-
 <body>
     <?php include('../components/navbar.php'); ?>
     <div class="container">
@@ -200,9 +205,9 @@ if (isset($_POST['submit'])) {
                         <li style="color:red;list-style:none;"><?php echo $err; ?></li>
                     <?php endforeach; ?>
                 </ul>
-            <?php endif; ?> 
-                <div class="email_div">
+            <?php endif; ?>
             <form action="" method="post">
+                <div class="email_div">
                     <span>Email Address</span>
                     <div class="email_field">
                         <input type="email" id="email" class="email" name="email" required placeholder="example@gmail.com">
@@ -217,13 +222,11 @@ if (isset($_POST['submit'])) {
                 </div>
                 <input class="login_submit" type="submit" value="Login" name="submit">
             </form>
-            <p class="reg_link">Not registered? Click <a href="signup.php">here</a> to register.
-            </p>
-            <p class="forget_link"><a href="../services/forgetPassword.php">forget Password ?</a>
-            </p>
+            <p class="reg_link">Not registered? Click <a href="signup.php">here</a> to register.</p>
+            <p class="forget_link"><a href="../services/forgetPassword.php">Forget Password?</a></p>
         </div>
     </div>
-    <?php include('../components/footer.php') ?>
+    <?php include('../components/footer.php'); ?>
     <script>
         const password = document.querySelector('.password');
         const toggler_password = document.querySelector('.toggler_password');
@@ -240,16 +243,13 @@ if (isset($_POST['submit'])) {
 
         toggler_password.addEventListener('click', togglePassword);
 
-        //error
+        // Error display timeout
         const errorMessage = document.querySelector('.error');
-
         if (errorMessage && errorMessage.innerHTML.trim() !== '') {
             setTimeout(function() {
                 errorMessage.style.display = 'none';
             }, 5000);
         }
     </script>
-
 </body>
-
 </html>

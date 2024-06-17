@@ -102,13 +102,14 @@ body {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     padding: 20px;
     margin: 0 auto;
+    display: flex;
 }
 
 .product-details img {
-    min-height: 300px;
+    min-height: 200px;
     max-height:650px;
     height: auto;
-    width:100%;
+    width:200px;
     /* border-radius: 5px; */
     /* margin-bottom: 20px;
     margin-left: -20px;

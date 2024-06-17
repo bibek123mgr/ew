@@ -13,8 +13,9 @@ if(isset($_POST['update'])){
    $name = $_POST['name'];
    $price = $_POST['price'];
    $category = $_POST['category'];
+   $description = $_POST['description'];
    // Update product information
-   $update_product_query = "UPDATE `products` SET name = '$name', categoryID = '$category', price = '$price' WHERE id = '$pid'";
+   $update_product_query = "UPDATE `products` SET name = '$name', categoryID = '$category',  description = '$description', price = '$price' WHERE id = '$pid'";
    $update_product_result = mysqli_query($conn, $update_product_query);
 
    if($update_product_result) {
@@ -108,12 +109,14 @@ if(mysqli_num_rows($show_products_result) > 0){
                 }
                 ?>
             </select>
+            <textarea name="description" id="description" class="description" rows="8" required minlength="100" style="resize: none;"><?= $fetch_products['description']; ?></textarea>
       <span>update image</span>
       <input type="file" name="image" class="box" accept="image/jpg, image/jpeg, image/png, image/webp">
       <div class="flex-btn">
          <input type="submit" value="update" class="btn" name="update">
          <a href="products.php" class="option-btn">go back</a>
       </div>
+      
    </form>
    <?php
          }
@@ -134,6 +137,7 @@ if(mysqli_num_rows($show_products_result) > 0){
   background-color: #f9f9f9;
   border: 1px solid #ddd;
   border-radius: 5px;
+  margin-top: 30px;
 }
 
 .update-product .heading {

@@ -7,8 +7,8 @@ function pay($totalamount, $name, $email, $phone, $productorderid, $productname)
 {
     $curl = curl_init();
     $data = array(
-        'return_url' => 'http://localhost/bca/services/success.php',
-        'website_url' => 'http://localhost/bca/pages/home.php',
+        'return_url' => 'http://localhost/foodapp/services/success.php',
+        'website_url' => 'http://localhost/foodapp/pages/home.php',
         'amount' => $totalamount,
         'purchase_order_id' => $productorderid .time(),
         'purchase_order_name' => $productname,

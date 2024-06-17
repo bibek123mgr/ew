@@ -1,3 +1,5 @@
+
+
 <?php
 ob_start();
 
@@ -8,6 +10,9 @@ include('../components/fetchdata.php');
 if (!isset($userId)) {
     header('Location:../pages/home.php');
 }
+
+$address = isset($_POST['address']) ? $_POST['address'] : null;
+
 
 $error = [];
 
@@ -23,6 +28,8 @@ if (mysqli_num_rows($checkquery) > 0) {
     $fetch_user = mysqli_fetch_assoc($checkquery);
     $name = $fetch_user['name'];
     $email = $fetch_user['email'];
+    // $address = $_POST['address']; // Assuming the address is submitted via a form using the POST method
+
 
     // Check if user has updated their profile
     if (empty($fetch_user['number']) || empty($fetch_user['address']) || empty($fetch_user['gender']) || empty($fetch_user['dob'])) {

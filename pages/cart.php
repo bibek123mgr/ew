@@ -302,8 +302,15 @@ $grand_total = 0;
                 display: none;
             }
         }
+
+        .before{
+        
+    margin-bottom: 36vh;
+
+        }
     </style>
 
+<?php include '../components/footer.php'; ?>
 
 
 </body>

@@ -1,5 +1,5 @@
 <?php
-session_start(); // Start the session if not already started
+session_start(); 
 include('../connection.php');
 
 if(isset($_GET['orderId'])){
@@ -8,7 +8,7 @@ if(isset($_GET['orderId'])){
 
 if(!isset($_SESSION['admin_id'])){
     header('Location: dashboard.php');
-    exit; // Stop further execution
+    exit; 
 }
 
 $sql = mysqli_query($conn, "SELECT * FROM `orderss` WHERE id='$id'");
@@ -25,23 +25,19 @@ $paymentDetails = mysqli_fetch_assoc($fetchpaymentDetails);
     $id=$_GET['orderId'];
    $order_status = $_POST['order_status'];
    
-   // Update order status
    $update_status_query = "UPDATE `orderss` SET orderStatus = '$order_status' WHERE id = '$id'";
    $update_status_result = mysqli_query($conn, $update_status_query);
    
    if ($update_status_result) {
       $message[] = 'Order status updated!';
       
-      // Fetch user ID
       $select_order_query = "SELECT * FROM `orderss` WHERE id = '$id'";
       $select_order_result = mysqli_query($conn, $select_order_query);
       $order = mysqli_fetch_assoc($select_order_result);
       $userId = $order['userId'];
 
-      // Notification message
       $notification_message = "Your order (ID: $id) is $order_status.";
       
-      // Insert notification
       $insert_notification_query = "INSERT INTO `notifications` (message, userId) VALUES ('$notification_message', '$userId')";
       $insert_notification_result = mysqli_query($conn, $insert_notification_query);
       

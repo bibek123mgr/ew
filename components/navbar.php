@@ -1,4 +1,8 @@
 <?php ob_start(); ?>
+
+<?php
+$search_query = isset($_GET['query']) ? htmlspecialchars($_GET['query']) : '';
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -92,7 +96,7 @@
             margin-right: 10px;
         }
 
-        .search_bar form {
+        .form {
             width: 250px;
             height: 30px;
             background-color: #D9D9D9;
@@ -101,6 +105,9 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
+        }
+        .for{
+            display: flex;
         }
 
         .right_nav {
@@ -131,6 +138,7 @@
 
         .toggle_nav .search_bar form {
             width: 200px;
+            
         }
 
         /*cart css*/
@@ -243,11 +251,11 @@ if ($row_count > 0) {
 
                 </ul>
                 <div class='search_bar'>
-                    <form action="" method="POST">
-                        <input type="text" class="nav_input" placeholder="search foods">
-                        <button  type="submit"><img src="../assets/search.png" alt="" style="height:23px;"></button>
-                    </form>
-                </div>
+        <form action="search.php" method="GET" class="for">
+            <input class="form" type="text" name="query" placeholder="Search for dishes..." value="<?= htmlspecialchars($search_query); ?>">
+            <button type="submit" class="search">Search</button>
+        </form>
+        </div>
                 <ul class='user'>
 
                     <li>
@@ -311,10 +319,10 @@ if ($row_count > 0) {
     </div>
     <div class="toggle_nav" id="toggle_nav">
         <div class='search_bar'>
-            <form action="" method="POST">
-                <input type="text" class="nav_input" placeholder="search foods">
-                <img src="../assets/search.png" alt="" style="height:20px;">
-            </form>
+        <form action="search.php" method="GET">
+                    <input type="text" name="query" placeholder="Search for dishes..." value="<?= htmlspecialchars($search_query); ?>">
+                    <button type="submit">Search</button>
+         </form>
         </div>
         <ul class='menu'>
             <li><a href="../pages/home.php">Home</a></li>

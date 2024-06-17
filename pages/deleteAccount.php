@@ -5,31 +5,44 @@ include('../components/fetchdata.php');
 if (!isset($userId)) {
     header('Location: home.php');
 }
-?>
-<?php
+
 $error = "";
+
 if (isset($_POST['Delete'])) {
     $user_input_password = $_POST['password'];
+
     if (empty($user_input_password)) {
         $error = "Please enter your password";
     } else {
+        // Check if the entered password matches the user's password
         $sql = "SELECT * FROM `users` WHERE id='$userId'";
         $result = mysqli_query($conn, $sql);
+
         if ($result && mysqli_num_rows($result) > 0) {
             $row = mysqli_fetch_assoc($result);
             $old_password = $row['password'];
 
-            if (!password_verify($user_input_password,$old_password)) {
+            if (!password_verify($user_input_password, $old_password)) {
                 $error = 'Invalid Password';
             } else {
-                $delete_sql = "DELETE FROM users WHERE id='$userId'";
-                $delete_result = mysqli_query($conn, $delete_sql);
+                // Delete associated records first
+                $delete_orders_query = "DELETE FROM `orderss` WHERE userId='$userId'";
+                $delete_orders_result = mysqli_query($conn, $delete_orders_query);
 
-                if ($delete_result) {
-                    header('Location: ../components/user_logout.php');
-                    exit;
+                if ($delete_orders_result) {
+                    // Now delete the user's record
+                    $delete_user_query = "DELETE FROM users WHERE id='$userId'";
+                    $delete_user_result = mysqli_query($conn, $delete_user_query);
+
+                    if ($delete_user_result) {
+                        // Redirect to logout page or any other page
+                        header('Location: ../components/user_logout.php');
+                        exit;
+                    } else {
+                        $error = "Something went wrong while deleting the user";
+                    }
                 } else {
-                    $error = "Something went wrong while deleting the user";
+                    $error = "Error deleting associated orders: " . mysqli_error($conn);
                 }
             }
         } else {

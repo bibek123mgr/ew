@@ -1,39 +1,49 @@
 <?php
 
 include '../connection.php';
-
 session_start();
 
 $admin_id = $_SESSION['admin_id'];
 
 if (!isset($admin_id)) {
-   header('location:admin_login.php');
-   exit();
+    header('location:admin_login.php');
+    exit();
 }
 
 if (isset($_GET['delete'])) {
-   $delete_id = $_GET['delete'];
+    $delete_id = mysqli_real_escape_string($conn, $_GET['delete']);
 
-   // Delete user
-   $delete_users_query = "DELETE FROM `users` WHERE id = '$delete_id'";
-   $delete_users_result = mysqli_query($conn, $delete_users_query);
+    mysqli_begin_transaction($conn);
 
-   if ($delete_users_result) {
-      // Delete orders associated with the user
-      $delete_order_query = "DELETE FROM `orders` WHERE user_id = '$delete_id'";
-      mysqli_query($conn, $delete_order_query);
+    try {
+        mysqli_query($conn, "SET FOREIGN_KEY_CHECKS=0");
 
-      // Delete cart items associated with the user
-      $delete_cart_query = "DELETE FROM `cart` WHERE user_id = '$delete_id'";
-      mysqli_query($conn, $delete_cart_query);
+        $delete_order_query = "DELETE FROM `orderss` WHERE id = '$delete_id'";
+        if (!mysqli_query($conn, $delete_order_query)) {
+            throw new Exception('Error deleting orderss: ' . mysqli_error($conn));
+        }
 
-      header('location:users_accounts.php');
-      exit();
-   } else {
-      echo 'Error deleting user: ' . mysqli_error($conn);
-   }
+        $delete_cart_query = "DELETE FROM `carts` WHERE id = '$delete_id'";
+        if (!mysqli_query($conn, $delete_cart_query)) {
+            throw new Exception('Error deleting carts items: ' . mysqli_error($conn));
+        }
+
+        $delete_users_query = "DELETE FROM `users` WHERE id = '$delete_id'";
+        if (!mysqli_query($conn, $delete_users_query)) {
+            throw new Exception('Error deleting user: ' . mysqli_error($conn));
+        }
+
+        mysqli_query($conn, "SET FOREIGN_KEY_CHECKS=1");
+
+        mysqli_commit($conn);
+
+        header('location:users_accounts.php');
+        exit();
+    } catch (Exception $e) {
+        mysqli_rollback($conn);
+        echo $e->getMessage();
+    }
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -45,7 +55,6 @@ if (isset($_GET['delete'])) {
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>users accounts</title>
 
-   <!-- font awesome cdn link  -->
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
 
 
@@ -154,7 +163,6 @@ if (mysqli_num_rows($select_account_result) > 0) {
          font-size: 20px;
          border-radius: 5px;
 
-         /* margin-left: -1rem; */
 
          background-color: red;
       }
@@ -174,7 +182,6 @@ if (mysqli_num_rows($select_account_result) > 0) {
       }
    </style>
 
-   <!-- custom js file link  -->
    <script src="../js/admin_script.js"></script>
 
 </body>

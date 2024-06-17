@@ -1,37 +1,32 @@
 <?php
-include ('../connection.php');
+include('../connection.php');
 session_start();
 include('../components/fetchdata.php');
 
-if(isset($_POST['delete_notification'])) {
+
+
+if (isset($_POST['delete_notification'])) {
     $notificationId = $_POST['notification_id'];
 
-    // Delete the notification from the database
     $deleteQuery = mysqli_query($conn, "DELETE FROM `notifications` WHERE id = '$notificationId'");
-    if($deleteQuery) {
-        // If deletion is successful, redirect to the current page
-        header("Location: $_SERVER[PHP_SELF]");
+    if ($deleteQuery) {
+        header("Location: " . $_SERVER['PHP_SELF']);
         exit();
     } else {
-        // If deletion fails, display an error message
         $deleteError = "Error: Failed to delete notification.";
     }
 }
 
-if(isset($_POST['clearall'])) {
+if (isset($_POST['clearall'])) {
     $deleteQuery = mysqli_query($conn, "DELETE FROM `notifications` WHERE userId = '$userId'");
-    if($deleteQuery) {
-        // If deletion is successful, redirect to the current page
-        header("Location: $_SERVER[PHP_SELF]");
+    if ($deleteQuery) {
+        header("Location: " . $_SERVER['PHP_SELF']);
         exit();
     } else {
-        // If deletion fails, display an error message
-        $deleteError = "Error: Failed to delete notification.";
+        $deleteError = "Error: Failed to delete notifications.";
     }
 }
-
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -102,38 +97,38 @@ if(isset($_POST['clearall'])) {
     </style>
 </head>
 <body>
-    <?php include("../components/navbar.php")?>
+    <?php include("../components/navbar.php"); ?>
     <div class="notification">
-    <div style="display:flex;flex-direction:column;align-items:center">
-    <div id="notifications-container">
-        <?php
+        <div style="display:flex;flex-direction:column;align-items:center">
+            <div id="notifications-container">
+                <h2>Your Notifications</h2>
+                <?php
+                $query = "SELECT * FROM notifications WHERE userId = '$userId'";
+                $result = mysqli_query($conn, $query);
 
-        if (isset($userId)) {
-            $query = "SELECT * FROM notifications WHERE userId = '$userId'";
-            $result = mysqli_query($conn, $query);
-
-            if (mysqli_num_rows($result) > 0) {
-                while ($row = mysqli_fetch_assoc($result)) {
-                    echo "<div class='notification'>";
-                    echo "<div class='notification-text'>" . $row['message'] . "</div>";
-                    echo "<form method='post'>";
-                    echo "<input type='hidden' name='notification_id' value='" . $row['id'] . "'>";
-                    echo "<button type='submit' name='delete_notification' class='delete-btn'>❌</button>";
-                    echo "</form>";
-                    echo "</div>";
+                if ($result) {
+                    if (mysqli_num_rows($result) > 0) {
+                        while ($row = mysqli_fetch_assoc($result)) {
+                            echo "<div class='notification'>";
+                            echo "<div class='notification-text'>" . $row['message'] . "</div>";
+                            echo "<form method='post'>";
+                            echo "<input type='hidden' name='notification_id' value='" . $row['id'] . "'>";
+                            echo "<button type='submit' name='delete_notification' class='delete-btn'>❌</button>";
+                            echo "</form>";
+                            echo "</div>";
+                        }
+                        echo "<form action='' method='POST'>";
+                        echo "<button id='clear-all-btn' name='clearall' type='submit'>Clear All Notifications</button>";
+                        echo "</form>";
+                    } else {
+                        echo "<p>No notifications found.</p>";
+                    }
+                } else {
+                    echo "<p>Error fetching notifications: " . mysqli_error($conn) . "</p>";
                 }
-                echo "<form action='' method='POST'>";
-                echo "<button id='clear-all-btn' name='clearall' type='submit'>Clear All Notifications</button>";
-                echo "</form>";
-            } else {
-                echo "<p>No notifications found.</p>";
-            }
-        } else {
-            echo "<p>Please log in to view notifications.</p>";
-        }
-        ?>
-    </div>
-    </div>
+                ?>
+            </div>
+        </div>
     </div>
 </body>
-
+</html>

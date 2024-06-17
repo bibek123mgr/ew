@@ -3,6 +3,14 @@ ob_start();
 include('../connection.php');
 session_start();
 include('../components/fetchdata.php');
+
+if (!isset($_SESSION['user_data'])) {
+   header('Location: home.php');
+   exit;
+}
+
+$data = $_SESSION['user_data'];
+$userId = $data['id'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -94,6 +102,10 @@ include('../components/fetchdata.php');
             padding: 4px;
          }
       }
+
+      #bottom{
+         margin-bottom: 36vh;
+      }
    </style>
 
 </head>
@@ -103,7 +115,7 @@ include('../components/fetchdata.php');
    <?php include '../components/navbar.php' ?>
 <div style="max-width:1280px;margin:0 auto;">
    <?php
-   $select_orders_query = "SELECT * FROM `orderss`";
+   $select_orders_query = "SELECT * FROM `orderss` WHERE `userId` = '$userId'";
    $select_orders_result = mysqli_query($conn, $select_orders_query);
 
    if (mysqli_num_rows($select_orders_result) === 0) {
@@ -115,8 +127,8 @@ include('../components/fetchdata.php');
    } else {
    ?>
       <section class="orders">
-         <h1 class="heading" style="margin:20px 0;text-decoration:underline" >My Orders</h1>
-         <div class="table-responsive">
+         <h1 class="heading" style="margin:20px 0;text-decoration:underline">My Orders</h1>
+         <div class="table-responsive" id="bottom">
             <table class="order-table">
                <thead>
                   <tr>
@@ -149,7 +161,7 @@ include('../components/fetchdata.php');
                            <div style="display:flex;">
                               <form action="" method="POST" style="margin-right:5px;">
                                  <input type="hidden" value="<?= $fetch_orders['id']; ?>" name="orderId">
-                                 <input type="submit" value="Cancel Order" class="btn" name="update_orderStatus">
+                                 <input type="submit" value="Cancel Order" class="btn" name="update_orderStatus"id="reloadButton">
                               </form>
                               <a href="./singleorder.php?orderId=<?= $fetch_orders['id']; ?>" class="delete-btn">See More</a>
                            </div>
@@ -166,39 +178,52 @@ include('../components/fetchdata.php');
    }
    ?>
 </div>
-
+<script>
+        document.getElementById("reloadButton").onclick = function() {
+            location.reload();
+        };
+    </script>
 </body>
 
 </html>
 <?php
 
+
 if (!isset($_SESSION['user_data'])) {
-   header('Location:home.php');
-} else {
-   $data = $_SESSION['user_data'];
-   $userId = $data['id'];
+   echo 'User not logged in';
+   exit;
 }
-$select_orders = mysqli_query($conn, "SELECT * FROM `orderss` WHERE userId = '$userId'");
 
-$message =[]; 
+$data = $_SESSION['user_data'];
+$userId = $data['id'];
 
-if (isset($_POST['update_orderStatus'])) {
+if (isset($_POST['orderId'])) {
    $orderId = $_POST['orderId'];
-   $result = mysqli_query($conn, "SELECT orderStatus FROM orderss WHERE id = '$orderId'");
+   $result = mysqli_query($conn, "SELECT orderStatus FROM orderss WHERE id = '$orderId' AND userId = '$userId'");
    if ($result && mysqli_num_rows($result) > 0) {
       $row = mysqli_fetch_assoc($result);
       if ($row['orderStatus'] == 'pending') {
          if (mysqli_query($conn, "UPDATE orderss SET orderStatus = 'cancelled' WHERE id = '$orderId'")) {
-            $message[] = 'Order status updated!';
+            $logMessage = "Order ID: $orderId was canceled by user ID: $userId\n";
+            file_put_contents('admin_notifications.log', $logMessage, FILE_APPEND);
+            echo 'Order cancelled successfully!';
          } else {
-            $message[] = 'Error updating order status: ' . mysqli_error($conn);
+            echo 'Error updating order status: ' . mysqli_error($conn);
          }
       } else {
-         $message[] = 'Order can\'t be cancel!';
+         echo 'Order cancelled successfully!';
       }
+   } else {
+      echo 'Order not found';
    }
 }
-foreach ($message as $msg) {
-   echo $msg . "<br>";
-}
 ?>
+
+<?php include '../components/footer.php'; ?>
+
+
+
+
+
+
+
